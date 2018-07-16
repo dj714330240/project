@@ -47,14 +47,18 @@ public class LastActiveController extends BaseController {
                 return ResponseBo.error("手机号码格式不正确！");
             }
             Map<String,Object> parms = new HashMap<>();
-            parms.put("sendTelNo",phone);
+            parms.put("TelNo",phone);
             Map<String,Object> map = HttpUtils.sendPostBse(RequestConfig.LAST_ACTIVE_TIME_URL, parms);
             CreditLog creditLog = new CreditLog();
             creditLog.setUserId(user.getUserId());
             creditLog.setName("最近活跃时间查询");
             creditLog.setType(4);
             creditLogService.addCreditLog(creditLog);
-            return ResponseBo.ok(map);
+            if (map.get("code").toString().equals("00")) {
+                return ResponseBo.ok(map);
+            }else {
+                return ResponseBo.error(map.get("errorDesc").toString());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseBo.error("最近活跃时间查询失败，请联系网站管理员！");

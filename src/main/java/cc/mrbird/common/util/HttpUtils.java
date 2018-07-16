@@ -478,7 +478,13 @@ public class HttpUtils {
 		map.put("sequence",uuid);
 		map.put("orgCode",RequestConfig.INSTITUTION_ACCOUNT);
 		map.put("curTime",dateName);
-		map.put("orgSeq",HttpUtils.getOrgSeq(map.get("sendTelNo").toString(),dateName,uuid));
+		String phone = "";
+		if (map.get("sendTelNo") != null ) {
+			phone = map.get("sendTelNo").toString();
+		}else if(map.get("TelNo") != null){
+			phone = map.get("TelNo").toString();
+		}
+		map.put("orgSeq",HttpUtils.getOrgSeq(phone,dateName,uuid));
 		return sendPostMap(url,map);
 	}
 

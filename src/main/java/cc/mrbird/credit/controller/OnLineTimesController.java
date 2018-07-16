@@ -54,7 +54,11 @@ public class OnLineTimesController extends BaseController {
             creditLog.setName("在网时长查询");
             creditLog.setType(6);
             creditLogService.addCreditLog(creditLog);
-            return ResponseBo.ok(map);
+            if (map.get("code").toString().equals("00")) {
+                return ResponseBo.ok(map);
+            }else {
+                return ResponseBo.error(map.get("errorDesc").toString());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseBo.error("在网时长查询失败，请联系网站管理员！");
