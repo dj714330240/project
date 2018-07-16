@@ -35,7 +35,7 @@ public class OnLineNumberController extends BaseController {
 
     @Log("用户在网号码个数查询")
     @RequiresPermissions("on_line_number:info")
-    @RequestMapping(value = "on_line_number/info",method = RequestMethod.GET)
+    @RequestMapping(value = "on_line_number/info",method = RequestMethod.POST)
     @ResponseBody
     public ResponseBo getDetail (String phone) {
         try {

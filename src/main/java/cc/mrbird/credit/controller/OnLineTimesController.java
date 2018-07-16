@@ -35,7 +35,7 @@ public class OnLineTimesController extends BaseController {
 
     @Log("在网时长查询")
     @RequiresPermissions("on_line_times:info")
-    @RequestMapping(value = "on_line_times/info",method = RequestMethod.GET)
+    @RequestMapping(value = "on_line_times/info",method = RequestMethod.POST)
     @ResponseBody
     public ResponseBo getDetail (String phone) {
         try {

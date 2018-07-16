@@ -35,7 +35,7 @@ public class CallFrequencyController extends BaseController {
 
     @Log("通话次数评分查询")
     @RequiresPermissions("call_frequency:info")
-    @RequestMapping(value = "call_frequency/info",method = RequestMethod.GET)
+    @RequestMapping(value = "call_frequency/info",method = RequestMethod.POST)
     @ResponseBody
     public ResponseBo getDetail (String phone) {
         try {

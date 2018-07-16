@@ -35,7 +35,7 @@ public class WorkAddressController extends BaseController {
 
     @Log("工作地验证查询")
     @RequiresPermissions("work_address:info")
-    @RequestMapping(value = "work_address/info",method = RequestMethod.GET)
+    @RequestMapping(value = "work_address/info",method = RequestMethod.POST)
     @ResponseBody
     public ResponseBo getDetail (String phone, String longitude, String latitude) {
         try {

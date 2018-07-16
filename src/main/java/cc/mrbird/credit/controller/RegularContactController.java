@@ -27,15 +27,15 @@ public class RegularContactController extends BaseController {
     CreditLogService creditLogService;
 
     @Log("常用联系人验证")
-    @RequestMapping("on_line_number")
-    @RequiresPermissions("on_line_number:list")
+    @RequestMapping("regular_contact")
+    @RequiresPermissions("regular_contact:list")
     public String index() {
-        return "credit/on_line_number/on_line_number";
+        return "credit/regular_contact/regular_contact";
     }
 
     @Log("常用联系人验证查询")
-    @RequiresPermissions("on_line_number:info")
-    @RequestMapping(value = "on_line_number/info",method = RequestMethod.GET)
+    @RequiresPermissions("regular_contact:info")
+    @RequestMapping(value = "regular_contact/info",method = RequestMethod.POST)
     @ResponseBody
     public ResponseBo getDetail (String phone, String month, String checkTelNo) {
         try {

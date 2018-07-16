@@ -1,10 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-</body>
-</html>
+<div class="card">
+    <div class="card-block">
+        <div class="table-responsive">
+            <div id="data-table_wrapper" class="dataTables_wrapper">
+                <div class="dataTables_buttons hidden-sm-down actions">
+                    <span class="actions__item zmdi zmdi-search" onclick="search()" title="搜索" />
+                </div>
+                <div id="data-table_filter" class="dataTables_filter">
+                    <form class="user-table-form">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon"> 姓名： </span>
+                                    <div class="form-group">
+                                        <input type="text" name="userName" class="form-control"> <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon"> 手机号： </span>
+                                    <div class="form-group">
+                                        <input type="text" name="phone" class="form-control"> <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon"> 证件类型： </span>
+                                    <div class="form-group">
+                                        <select class="form-control" name="cardType">
+                                            <option value="0101" selected>居民身份证</option>
+                                            <option value="0102">户口簿</option>
+                                            <option value="0103">军人身份证</option>
+                                            <option value="0104">武装警察身份证</option>
+                                            <option value="0105">港澳居民往来内地通行</option>
+                                            <option value="0106">台湾居民往来大陆通行证</option>
+                                            <option value="0107">护照</option>
+                                            <option value="0199">其他个人证件</option>
+                                            <option value="0999">未知(手机号码不存在或者本身非实名)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon"> 证件号码： </span>
+                                    <div class="form-group">
+                                        <input type="text" name="cardNumber" class="form-control"> <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <table class="table">
+                    <tbody>
+                    <tr class="userName">
+                        <td>姓名</td>
+                        <td id="userName"></td>
+                        <td id="userNameStatus"></td>
+                    </tr>
+                    <tr class="phone">
+                        <td>手机号</td>
+                        <td id="phone"></td>
+                        <td id="phoneStatus"></td>
+                    </tr>
+                    <tr class="cardType">
+                        <td>证件类型</td>
+                        <td id="cardType"></td>
+                        <td>--</td>
+                    </tr>
+                    <tr class="cardNumber">
+                        <td>证件号码</td>
+                        <td id="cardNumber"></td>
+                        <td id="cardNumberStatus"></td>
+                    </tr>
+                    <tr class="status">
+                        <td>查询状态</td>
+                        <td id="status"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script data-th-src="@{js/app/credit/three_elements/three_elements.js}"></script>

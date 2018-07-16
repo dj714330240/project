@@ -35,7 +35,7 @@ public class LastActiveController extends BaseController {
 
     @Log("最近活跃时间查询")
     @RequiresPermissions("last_active:info")
-    @RequestMapping(value = "last_active/info",method = RequestMethod.GET)
+    @RequestMapping(value = "last_active/info",method = RequestMethod.POST)
     @ResponseBody
     public ResponseBo getDetail (String phone) {
         try {

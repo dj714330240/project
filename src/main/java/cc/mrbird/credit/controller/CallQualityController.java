@@ -35,7 +35,7 @@ public class CallQualityController extends BaseController {
 
     @Log("近六月平均通话质量查询")
     @RequiresPermissions("call_quality:info")
-    @RequestMapping(value = "call_quality/info",method = RequestMethod.GET)
+    @RequestMapping(value = "call_quality/info",method = RequestMethod.POST)
     @ResponseBody
     public ResponseBo getDetail (String phone) {
         try {

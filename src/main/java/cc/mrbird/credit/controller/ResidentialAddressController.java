@@ -35,7 +35,7 @@ public class ResidentialAddressController extends BaseController {
 
     @Log("居住地验证查询")
     @RequiresPermissions("residential_address:info")
-    @RequestMapping(value = "residential_address/info",method = RequestMethod.GET)
+    @RequestMapping(value = "residential_address/info",method = RequestMethod.POST)
     @ResponseBody
     public ResponseBo getDetail (String phone, String longitude, String latitude) {
         try {

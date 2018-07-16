@@ -35,7 +35,7 @@ public class ThreeElementsController extends BaseController {
 
     @Log("三要素核身查询")
     @RequiresPermissions("three_elements:info")
-    @RequestMapping(value = "three_elements/info",method = RequestMethod.GET)
+    @RequestMapping(value = "three_elements/info",method = RequestMethod.POST)
     @ResponseBody
     public ResponseBo getDetail (String phone,String cardType, String cardNumber,String userName) {
         try {
@@ -66,7 +66,12 @@ public class ThreeElementsController extends BaseController {
             creditLog.setName("三要素核身查询");
             creditLog.setType(1);
             creditLogService.addCreditLog(creditLog);
-            return ResponseBo.ok(map);
+            if (map.get("code").toString().equals("00")) {
+                return ResponseBo.ok(map);
+            }else {
+                return ResponseBo.error(map.get("errorDesc").toString());
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseBo.error("三要素核身查询失败，请联系网站管理员！");
