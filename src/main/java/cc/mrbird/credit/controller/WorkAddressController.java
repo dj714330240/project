@@ -21,23 +21,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class ThreeElementsController extends BaseController {
+public class WorkAddressController extends BaseController {
 
     @Autowired
     CreditLogService creditLogService;
 
-    @Log("三要素核身")
-    @RequestMapping("three_elements")
-    @RequiresPermissions("three_elements:list")
+    @Log("工作地验证")
+    @RequestMapping("work_address")
+    @RequiresPermissions("work_address:list")
     public String index() {
-        return "credit/three_elements/three_elements";
+        return "credit/work_address/work_address";
     }
 
-    @Log("三要素核身查询")
-    @RequiresPermissions("three_elements:info")
-    @RequestMapping(value = "three_elements/info",method = RequestMethod.GET)
+    @Log("工作地验证查询")
+    @RequiresPermissions("work_address:info")
+    @RequestMapping(value = "work_address/info",method = RequestMethod.GET)
     @ResponseBody
-    public ResponseBo getDetail (String phone,String cardType, String cardNumber,String userName) {
+    public ResponseBo getDetail (String phone, String longitude, String latitude) {
         try {
             User user = super.getCurrentUser();
             if (StringUtils.isEmpty(phone)) {
@@ -46,33 +46,28 @@ public class ThreeElementsController extends BaseController {
             if (!AccountValidatorUtil.isMobile(phone)) {
                 return ResponseBo.error("手机号码格式不正确！");
             }
-            if (StringUtils.isEmpty(cardType)) {
-                return ResponseBo.error("证件类型不能为空！");
+            if (StringUtils.isEmpty(longitude)) {
+                return ResponseBo.error("所在经度不能为空！");
             }
-            if (StringUtils.isEmpty(cardNumber)) {
-                return ResponseBo.error("证件号码不能为空！");
-            }
-            if (StringUtils.isEmpty(userName)) {
-                return ResponseBo.error("姓名不能为空！");
+            if (StringUtils.isEmpty(latitude)) {
+                return ResponseBo.error("所在纬度不能为空！");
             }
             Map<String,Object> parms = new HashMap<>();
             parms.put("sendTelNo",phone);
-            parms.put("certType",cardType);
-            parms.put("certCode",cardNumber);
-            parms.put("userName",userName);
-            Map<String,Object> map = HttpUtils.sendPostBse(RequestConfig.THREE_ELEMENTS_URL, parms);
+            parms.put("longitude",longitude);
+            parms.put("latitude",latitude);
+            Map<String,Object> map = HttpUtils.sendPostBse(RequestConfig.WORK_ADDRESS_URL, parms);
             CreditLog creditLog = new CreditLog();
             creditLog.setUserId(user.getUserId());
-            creditLog.setName("三要素核身查询");
-            creditLog.setType(1);
+            creditLog.setName("工作地验证查询");
+            creditLog.setType(2);
             creditLogService.addCreditLog(creditLog);
             return ResponseBo.ok(map);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseBo.error("三要素核身查询失败，请联系网站管理员！");
+            return ResponseBo.error("工作地验证查询失败，请联系网站管理员！");
         }
     }
-
 
 
 }

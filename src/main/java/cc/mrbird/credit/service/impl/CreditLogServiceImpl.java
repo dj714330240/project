@@ -12,54 +12,74 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 @Service("creditLogService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class CreditLogServiceImpl extends BaseService<CreditLog> implements CreditLogService {
 
+    @Transactional
     @Override
     public void addCreditLog(CreditLog creditLog) {
         if (null != creditLog) {
-            Calendar cal = Calendar.getInstance();
-
-
-
             //查询数据维度
             List<CreditLog> list = findCreditLog(creditLog);
             if (null != list &&list.size()>0) {
                 for (CreditLog clg : list) {
-                    if (null != clg.getTimeType() && 1 == clg.getTimeType()) {
-                        int day = cal.get(Calendar.DATE);//获取日
-                        cal.setTime(clg.getModifyDate());
-                        int oldDay = cal.get(Calendar.DATE);
-                        if (day == oldDay) {
-                            creditLog.setCounts(creditLog.getCounts()+1);
-                        }else {
-                            creditLog.setCounts(1L);
-                        }
-                    } else if (null != clg.getTimeType() && 2 == clg.getTimeType()){
-
-                    }else {
-
-                    }
+                    addCounts(clg);
                 }
-//                creditLog = list.get(0);
-//                if (null != creditLog.getCounts()) {
-//                    creditLog.setCounts(creditLog.getCounts()+1);
-//                }else {
-//                    creditLog.setCounts(1L);
-//                }
-//                creditLog.setModifyDate(new Date());
-//               super.updateNotNull(creditLog);
             } else {
                 creditLog.setCounts(1L);
                 Date date = new Date();
+                creditLog.setTimeType(1);
                 creditLog.setModifyDate(date);
                 creditLog.setCreateTime(date);
+                super.save(creditLog);
+                creditLog.setTimeType(2);
+                creditLog.setId(null);
+                super.save(creditLog);
+                creditLog.setTimeType(3);
+                creditLog.setId(null);
                 super.save(creditLog);
             }
         }
     }
 
+    /**
+     *  增加访问记录
+     * @param creditLog
+     */
+    public void addCounts(CreditLog creditLog) {
+        Calendar cal = Calendar.getInstance();
+        Calendar old = Calendar.getInstance();
+                old.setTime(creditLog.getModifyDate());
+        if (null != creditLog.getTimeType() && 1 == creditLog.getTimeType()) {
+            if (old.get(Calendar.DATE) == cal.get(Calendar.DATE)) {
+                creditLog.setCounts(creditLog.getCounts()+1);
+            } else {
+                creditLog.setCounts(1L);
+            }
+        } else if (null != creditLog.getTimeType() && 2 == creditLog.getTimeType()){
+            if (old.get(Calendar.MONTH) == cal.get(Calendar.MONTH)) {
+                creditLog.setCounts(creditLog.getCounts()+1);
+            } else {
+                creditLog.setCounts(1L);
+            }
+        } else {
+            if (old.get(Calendar.YEAR) == cal.get(Calendar.YEAR)) {
+                creditLog.setCounts(creditLog.getCounts()+1);
+            } else {
+                creditLog.setCounts(1L);
+            }
+        }
+        creditLog.setModifyDate(new Date());
+        this.updateNotNull(creditLog);
+    }
+
+    /**
+     *  查询用户记录
+     * @param creditLog
+     * @return
+     */
     @Override
     public List<CreditLog> findCreditLog(CreditLog creditLog) {
         try {

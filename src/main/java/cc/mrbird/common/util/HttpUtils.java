@@ -344,9 +344,9 @@ public class HttpUtils {
 			// 获取所有响应头字段
 			Map<String, List<String>> map = connection.getHeaderFields();
 			// 遍历所有的响应头字段
-			for (String key : map.keySet()) {
-				System.out.println(key + "--->" + map.get(key));
-			}
+//			for (String key : map.keySet()) {
+//				System.out.println(key + "--->" + map.get(key));
+//			}
 			// 定义 BufferedReader输入流来读取URL的响应
 			in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String line;
@@ -464,6 +464,25 @@ public class HttpUtils {
 	}
 
 
+	/***
+	 *  默认请求封装
+	 * @param url	资源地址
+	 * @param map	请求参数
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	public static Map<String, Object> sendPostBse(String url, Map<String,Object> map) throws IOException, ParseException {
+		String uuid = HttpUtils.generateShortUuid();
+		String dateName = HttpUtils.getNowStr();
+		map.put("sequence",uuid);
+		map.put("orgCode",RequestConfig.INSTITUTION_ACCOUNT);
+		map.put("curTime",dateName);
+		map.put("orgSeq",HttpUtils.getOrgSeq(map.get("sendTelNo").toString(),dateName,uuid));
+		return sendPostMap(url,map);
+	}
+
+
 	/**
 	 * 模拟请求
 	 *
@@ -492,8 +511,8 @@ public class HttpUtils {
 		//设置参数到请求对象中
 		httpPost.setEntity(new UrlEncodedFormEntity(nvps, encoding));
 
-		System.out.println("请求地址："+url);
-		System.out.println("请求参数："+nvps.toString());
+//		System.out.println("请求地址："+url);
+//		System.out.println("请求参数："+nvps.toString());
 
 		//设置header信息
 		//指定报文头【Content-type】、【User-Agent】

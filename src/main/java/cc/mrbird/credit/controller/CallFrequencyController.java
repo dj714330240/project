@@ -21,23 +21,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class ThreeElementsController extends BaseController {
+public class CallFrequencyController extends BaseController {
 
     @Autowired
     CreditLogService creditLogService;
 
-    @Log("三要素核身")
-    @RequestMapping("three_elements")
-    @RequiresPermissions("three_elements:list")
+    @Log("通话次数评分")
+    @RequestMapping("call_frequency")
+    @RequiresPermissions("call_frequency:list")
     public String index() {
-        return "credit/three_elements/three_elements";
+        return "credit/call_frequency/call_frequency";
     }
 
-    @Log("三要素核身查询")
-    @RequiresPermissions("three_elements:info")
-    @RequestMapping(value = "three_elements/info",method = RequestMethod.GET)
+    @Log("通话次数评分查询")
+    @RequiresPermissions("call_frequency:info")
+    @RequestMapping(value = "call_frequency/info",method = RequestMethod.GET)
     @ResponseBody
-    public ResponseBo getDetail (String phone,String cardType, String cardNumber,String userName) {
+    public ResponseBo getDetail (String phone) {
         try {
             User user = super.getCurrentUser();
             if (StringUtils.isEmpty(phone)) {
@@ -46,33 +46,18 @@ public class ThreeElementsController extends BaseController {
             if (!AccountValidatorUtil.isMobile(phone)) {
                 return ResponseBo.error("手机号码格式不正确！");
             }
-            if (StringUtils.isEmpty(cardType)) {
-                return ResponseBo.error("证件类型不能为空！");
-            }
-            if (StringUtils.isEmpty(cardNumber)) {
-                return ResponseBo.error("证件号码不能为空！");
-            }
-            if (StringUtils.isEmpty(userName)) {
-                return ResponseBo.error("姓名不能为空！");
-            }
             Map<String,Object> parms = new HashMap<>();
             parms.put("sendTelNo",phone);
-            parms.put("certType",cardType);
-            parms.put("certCode",cardNumber);
-            parms.put("userName",userName);
-            Map<String,Object> map = HttpUtils.sendPostBse(RequestConfig.THREE_ELEMENTS_URL, parms);
+            Map<String,Object> map = HttpUtils.sendPostBse(RequestConfig.LAST_ACTIVE_TIME_URL, parms);
             CreditLog creditLog = new CreditLog();
             creditLog.setUserId(user.getUserId());
-            creditLog.setName("三要素核身查询");
-            creditLog.setType(1);
+            creditLog.setName("通话次数评分查询");
+            creditLog.setType(9);
             creditLogService.addCreditLog(creditLog);
             return ResponseBo.ok(map);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseBo.error("三要素核身查询失败，请联系网站管理员！");
+            return ResponseBo.error("通话次数评分查询失败，请联系网站管理员！");
         }
     }
-
-
-
 }

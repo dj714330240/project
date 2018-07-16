@@ -21,23 +21,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class ThreeElementsController extends BaseController {
+public class RegularContactController extends BaseController {
 
     @Autowired
     CreditLogService creditLogService;
 
-    @Log("三要素核身")
-    @RequestMapping("three_elements")
-    @RequiresPermissions("three_elements:list")
+    @Log("常用联系人验证")
+    @RequestMapping("on_line_number")
+    @RequiresPermissions("on_line_number:list")
     public String index() {
-        return "credit/three_elements/three_elements";
+        return "credit/on_line_number/on_line_number";
     }
 
-    @Log("三要素核身查询")
-    @RequiresPermissions("three_elements:info")
-    @RequestMapping(value = "three_elements/info",method = RequestMethod.GET)
+    @Log("常用联系人验证查询")
+    @RequiresPermissions("on_line_number:info")
+    @RequestMapping(value = "on_line_number/info",method = RequestMethod.GET)
     @ResponseBody
-    public ResponseBo getDetail (String phone,String cardType, String cardNumber,String userName) {
+    public ResponseBo getDetail (String phone, String month, String checkTelNo) {
         try {
             User user = super.getCurrentUser();
             if (StringUtils.isEmpty(phone)) {
@@ -46,33 +46,32 @@ public class ThreeElementsController extends BaseController {
             if (!AccountValidatorUtil.isMobile(phone)) {
                 return ResponseBo.error("手机号码格式不正确！");
             }
-            if (StringUtils.isEmpty(cardType)) {
-                return ResponseBo.error("证件类型不能为空！");
+            if (StringUtils.isEmpty(month)) {
+                return ResponseBo.error("目标月份不能为空!");
             }
-            if (StringUtils.isEmpty(cardNumber)) {
-                return ResponseBo.error("证件号码不能为空！");
+            if (Integer.parseInt(month)>12 || Integer.parseInt(month)<1) {
+                return ResponseBo.error("目标月份格式不正确！");
             }
-            if (StringUtils.isEmpty(userName)) {
-                return ResponseBo.error("姓名不能为空！");
+            if (StringUtils.isEmpty(checkTelNo)) {
+                return ResponseBo.error("验证手机号码不能为空！");
+            }
+            if (!AccountValidatorUtil.isMobile(checkTelNo)) {
+                return ResponseBo.error("验证手机号码格式不正确！");
             }
             Map<String,Object> parms = new HashMap<>();
-            parms.put("sendTelNo",phone);
-            parms.put("certType",cardType);
-            parms.put("certCode",cardNumber);
-            parms.put("userName",userName);
-            Map<String,Object> map = HttpUtils.sendPostBse(RequestConfig.THREE_ELEMENTS_URL, parms);
+            parms.put("sendTelNo", phone);
+            parms.put("month", month);
+            parms.put("checkTelNo", checkTelNo);
+            Map<String,Object> map = HttpUtils.sendPostBse(RequestConfig.REGULAR_CONTACT_URL, parms);
             CreditLog creditLog = new CreditLog();
             creditLog.setUserId(user.getUserId());
-            creditLog.setName("三要素核身查询");
-            creditLog.setType(1);
+            creditLog.setName("常用联系人验证查询");
+            creditLog.setType(8);
             creditLogService.addCreditLog(creditLog);
             return ResponseBo.ok(map);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseBo.error("三要素核身查询失败，请联系网站管理员！");
+            return ResponseBo.error("常用联系人验证查询失败，请联系网站管理员！");
         }
     }
-
-
-
 }
